@@ -22,7 +22,7 @@
 
 ## Project Overview
 
-Alipay Mini Game advertisement component for the Game Frame X Unity framework. Provides rewarded video ad integration for games published on the Alipay Mini Game platform.
+Alipay Mini Game platform adapter for the [Game Frame X Advertisement](https://github.com/GameFrameX/com.gameframex.unity.advertisement) system. This package provides rewarded video ad integration for games published on the Alipay Mini Game platform.
 
 ### Features
 
@@ -30,10 +30,11 @@ Alipay Mini Game advertisement component for the Game Frame X Unity framework. P
 - Automatic ad loading with show-failure retry
 - IL2CPP code stripping protection
 - Conditional compilation (`ENABLE_ALIPAY_MINI_GAME`, `ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT`)
+- Seamless integration with the Game Frame X Advertisement component
 
 ## Architecture
 
-This package implements the `BaseAdvertisementManager` abstraction from the Game Frame X Advertisement core:
+This package is an **adapter implementation** of `BaseAdvertisementManager` from the Game Frame X Advertisement core. It is discovered and loaded automatically by `AdvertisementComponent` via Unity Inspector configuration.
 
 | Class | Description |
 |-------|-------------|
@@ -45,11 +46,13 @@ This package implements the `BaseAdvertisementManager` abstraction from the Game
 
 ### Installation
 
-Add the package via Unity Package Manager (UPM):
+1. Install the [Advertisement core package](https://github.com/GameFrameX/com.gameframex.unity.advertisement)
+2. Add this adapter via Unity Package Manager (UPM):
 
 ```json
 {
   "dependencies": {
+    "com.gameframex.unity.advertisement": "https://github.com/GameFrameX/com.gameframex.unity.advertisement.git",
     "com.gameframex.unity.advertisement.alipayminigame": "https://github.com/GameFrameX/com.gameframex.unity.advertisement.alipayminigame.git"
   }
 }
@@ -59,21 +62,31 @@ Or add via git URL in the Unity Package Manager window.
 
 ### Usage
 
-```csharp
-using GameFrameX.Advertisement.AliPayMiniGame.Runtime;
+Configure in Unity Inspector: add the `AdvertisementComponent` to a GameObject, then select `AliPayMiniGameAdvertisementManager` from the implementation dropdown.
 
-// Initialize with your ad unit ID
-var manager = new AliPayMiniGameAdvertisementManager();
-manager.Initialize("your_ad_unit_id");
+```csharp
+using GameFrameX.Advertisement.Runtime;
+
+// Get the advertisement component (typically from your game entry)
+var adComponent = GameEntry.GetComponent<AdvertisementComponent>();
+
+// Set server-side verification data (optional)
+adComponent.SetExtraData("userId", player.UserId);
 
 // Play rewarded video ad
-manager.Play((watchedComplete) =>
+var option = new AdvertisementPlayOption
 {
-    if (watchedComplete)
+    OnSuccess    = (data) => Debug.Log("Ad shown successfully"),
+    OnFail       = (err) => Debug.LogError($"Ad failed: {err}"),
+    OnShowResult = (watched) =>
     {
-        // Reward the user
-    }
-});
+        if (watched)
+        {
+            // Reward the user
+        }
+    },
+};
+adComponent.Play(option);
 ```
 
 ## Platform Support

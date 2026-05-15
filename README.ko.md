@@ -22,7 +22,7 @@
 
 ## 프로젝트 개요
 
-Game Frame X Unity 프레임워크의 Alipay 미니 게임 광고 컴포넌트. Alipay 미니 게임 플랫폼에 게시되는 게임을 위한 리워드 동영상 광고 통합을 제공합니다.
+[Game Frame X 광고 시스템](https://github.com/GameFrameX/com.gameframex.unity.advertisement)의 Alipay 미니 게임 플랫폼 어댑터. Alipay 미니 게임 플랫폼에 게시되는 게임을 위한 리워드 동영상 광고 통합을 제공합니다.
 
 ### 기능
 
@@ -30,10 +30,11 @@ Game Frame X Unity 프레임워크의 Alipay 미니 게임 광고 컴포넌트. 
 - 광고 자동 로드 및 표시 실패 시 재시도
 - IL2CPP 코드 스트리핑 보호
 - 조건부 컴파일 (`ENABLE_ALIPAY_MINI_GAME`, `ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT`)
+- Game Frame X 광고 컴포넌트와 원활한 통합
 
 ## 아키텍처
 
-이 패키지는 Game Frame X 광고 코어의 `BaseAdvertisementManager` 추상화를 구현합니다:
+이 패키지는 Game Frame X 광고 코어의 `BaseAdvertisementManager` **어댑터 구현**입니다. Unity Inspector에서 `AdvertisementComponent`를 설정하면 자동으로 검색 및 로드됩니다.
 
 | 클래스 | 설명 |
 |--------|------|
@@ -45,11 +46,13 @@ Game Frame X Unity 프레임워크의 Alipay 미니 게임 광고 컴포넌트. 
 
 ### 설치
 
-Unity Package Manager (UPM)로 패키지 추가:
+1. [광고 코어 패키지](https://github.com/GameFrameX/com.gameframex.unity.advertisement) 설치
+2. 이 어댑터를 Unity Package Manager (UPM)로 추가:
 
 ```json
 {
   "dependencies": {
+    "com.gameframex.unity.advertisement": "https://github.com/GameFrameX/com.gameframex.unity.advertisement.git",
     "com.gameframex.unity.advertisement.alipayminigame": "https://github.com/GameFrameX/com.gameframex.unity.advertisement.alipayminigame.git"
   }
 }
@@ -59,21 +62,31 @@ Unity Package Manager (UPM)로 패키지 추가:
 
 ### 사용 예시
 
-```csharp
-using GameFrameX.Advertisement.AliPayMiniGame.Runtime;
+Unity Inspector에서 설정: GameObject에 `AdvertisementComponent`를 추가한 후, 구현 유형 드롭다운에서 `AliPayMiniGameAdvertisementManager`를 선택합니다.
 
-// 광고 유닛 ID로 초기화
-var manager = new AliPayMiniGameAdvertisementManager();
-manager.Initialize("your_ad_unit_id");
+```csharp
+using GameFrameX.Advertisement.Runtime;
+
+// 광고 컴포넌트 가져오기 (일반적으로 게임 엔트리에서)
+var adComponent = GameEntry.GetComponent<AdvertisementComponent>();
+
+// 서버 측 검증 데이터 설정 (선택 사항)
+adComponent.SetExtraData("userId", player.UserId);
 
 // 리워드 동영상 광고 재생
-manager.Play((watchedComplete) =>
+var option = new AdvertisementPlayOption
 {
-    if (watchedComplete)
+    OnSuccess    = (data) => Debug.Log("광고 표시 성공"),
+    OnFail       = (err) => Debug.LogError($"광고 표시 실패: {err}"),
+    OnShowResult = (watched) =>
     {
-        // 사용자에게 보상 지급
-    }
-});
+        if (watched)
+        {
+            // 사용자에게 보상 지급
+        }
+    },
+};
+adComponent.Play(option);
 ```
 
 ## 플랫폼 지원
