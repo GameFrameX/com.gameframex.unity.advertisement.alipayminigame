@@ -67,13 +67,9 @@ Unity Inspector で設定：GameObject に `AdvertisementComponent` を追加し
 ```csharp
 using GameFrameX.Advertisement.Runtime;
 
-// 広告コンポーネントを取得（通常はゲームエントリから）
+// 標準: GameEntry 経由（com.gameframex.unity.entry 非依存）
 var adComponent = GameEntry.GetComponent<AdvertisementComponent>();
-
-// サーバーサイド検証データを設定（オプション）
 adComponent.SetExtraData("userId", player.UserId);
-
-// リワード動画広告を再生
 var option = new AdvertisementPlayOption
 {
     OnSuccess    = (data) => Debug.Log("広告の表示に成功しました"),
@@ -87,6 +83,22 @@ var option = new AdvertisementPlayOption
     },
 };
 adComponent.Play(option);
+
+// ショートカット: GameApp 経由（com.gameframex.unity.entry が必要）
+GameApp.Advertisement.SetExtraData("userId", player.UserId);
+var option2 = new AdvertisementPlayOption
+{
+    OnSuccess    = (data) => Debug.Log("広告の表示に成功しました"),
+    OnFail       = (err) => Debug.LogError($"広告の表示に失敗しました: {err}"),
+    OnShowResult = (watched) =>
+    {
+        if (watched)
+        {
+            // ユーザーに報酬を付与
+        }
+    },
+};
+GameApp.Advertisement.Play(option2);
 ```
 
 ## プラットフォーム対応
