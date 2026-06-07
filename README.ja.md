@@ -104,6 +104,13 @@ Then add the package to `dependencies`:
 - Alipay ミニゲームプラットフォームのリワード動画広告対応
 - IL2CPP ストリッピング保護
 
+
+## 依存関係
+
+| パッケージ | 説明 |
+|----------|------|
+| (无) | - |
+
 ## ライセンス
 
 詳しくは [LICENSE.md](LICENSE.md) をご参照ください。
