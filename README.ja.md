@@ -20,6 +20,7 @@
 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | **日本語** | [한국어](README.ko.md)
 
 </div>
+
 ## プロジェクト概要
 
 [Game Frame X 広告システム](https://github.com/GameFrameX/com.gameframex.unity.advertisement)の Alipay ミニゲームプラットフォームアダプター。Alipay ミニゲームプラットフォームに公開するゲーム向けにリワード動画広告の統合を提供します。
