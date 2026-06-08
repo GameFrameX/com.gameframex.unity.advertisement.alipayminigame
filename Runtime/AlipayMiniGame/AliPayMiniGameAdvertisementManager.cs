@@ -100,15 +100,8 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
 
             if (_adManager == null)
             {
-                Load((loadSuccess) =>
-                {
-                    DoShow(success, fail, onShowResult);
-                }, (loadFail) =>
-                {
-                    fail?.Invoke(loadFail);
-                    onShowResult?.Invoke(false);
-                }, customData);
-                return;
+                var adManager = AlipaySdk.AP.GetAdManager();
+                _adManager = adManager.CreateRewardAd(_adUnitId);
             }
 
             DoShow(success, fail, onShowResult);
