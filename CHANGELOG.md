@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.1...1.0.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* 补全包规范文件（LICENSE/CHANGELOG/URL 字段/unity 字段） ([38a05ee](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/commit/38a05eebed8f254742106921e2ccce61d17b7d9f))
+
 ## [1.0.1](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.0...1.0.1) (2026-06-08)
 
 
