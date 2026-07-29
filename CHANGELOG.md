@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.2...1.0.3) (2026-07-29)
+
+
+### Bug Fixes
+
+* **deps:** 补齐 alipayminigame 广告包缺失的依赖声明 ([0e73ffd](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/commit/0e73ffd7c1d9ba151462368696453d0f84214939))
+
 ## [1.0.2](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.1...1.0.2) (2026-06-08)
 
 
