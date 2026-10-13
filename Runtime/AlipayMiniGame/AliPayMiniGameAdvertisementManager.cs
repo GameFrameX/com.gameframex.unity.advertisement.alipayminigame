@@ -17,9 +17,37 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
     [Preserve]
     public class AliPayMiniGameAdvertisementManager : BaseAdvertisementManager
     {
+        /// <summary>
+        /// 支付宝小游戏渠道唯一标识。
+        /// </summary>
+        [Preserve]
+        public const string ChannelId = "alipayminigame";
+
         private AlipaySdk.Ad.AlipayAdEntity _adManager;
         private string _adUnitId;
         private AliPayVideoAdCallback _aliPayVideoAdCallback;
+
+        /// <summary>
+        /// 使用强类型配置初始化支付宝小游戏广告管理器。
+        /// </summary>
+        /// <remarks>
+        /// Initializes the ad manager with the strongly-typed Alipay mini-game configuration.
+        /// </remarks>
+        /// <param name="config">支付宝小游戏渠道配置 / Alipay mini-game channel configuration</param>
+        [Preserve]
+        public override void Initialize(AdvertisementConfig config)
+        {
+            var aliPayConfig = config as AliPayMiniGameAdvertisementConfig;
+            if (aliPayConfig == null)
+            {
+                throw new ArgumentException("Config must be AliPayMiniGameAdvertisementConfig", nameof(config));
+            }
+
+            GameFrameworkGuard.NotNullOrEmpty(aliPayConfig.adUnitId, nameof(aliPayConfig.adUnitId));
+#pragma warning disable CS0618
+            Initialize(aliPayConfig.adUnitId, aliPayConfig.isDebug);
+#pragma warning restore CS0618
+        }
 
         /// <summary>
         /// 初始化支付宝小游戏广告管理器。

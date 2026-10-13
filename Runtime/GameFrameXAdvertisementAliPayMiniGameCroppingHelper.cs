@@ -18,6 +18,8 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
 #if UNITY_WEBGL && ENABLE_ALIPAY_MINI_GAME && ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT
             _ = typeof(AliPayMiniGameAdvertisementManager);
             _ = typeof(GameFrameX.Advertisement.AliPayMiniGame.Runtime.AliPayVideoAdCallback);
+            _ = typeof(AliPayMiniGameAdvertisementConfig);
+            _ = typeof(AliPayMiniGameAdvertisementBootstrap);
 #endif
         }
     }
