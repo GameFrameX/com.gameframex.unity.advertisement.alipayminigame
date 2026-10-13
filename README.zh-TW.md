@@ -35,13 +35,15 @@
 
 ## 架構概覽
 
-本套件是 Game Frame X 廣告核心 `BaseAdvertisementManager` 的**適配器實現**。透過 Unity Inspector 設定 `AdvertisementComponent` 後，自動發現並載入。
+本套件是 Game Frame X 廣告核心 `BaseAdvertisementManager` 的**適配器實現**。透過 `AliPayMiniGameAdvertisementBootstrap` 在 `BeforeSceneLoad` 階段把渠道工廠自註冊進主套件 `AdvertisementRegistry`；當巨集 `UNITY_WEBGL && ENABLE_ALIPAY_MINI_GAME && ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT` 未啟用時代碼被裁剪，註冊不會發生（引用即註冊）。初始化由工廠閉包注入強型別配置。
 
 | 類別 | 說明 |
 |------|------|
 | `AliPayMiniGameAdvertisementManager` | 激勵影片廣告管理器 — 載入、展示及生命週期管理 |
 | `AliPayVideoAdCallback` | 廣告載入/展示事件回調處理器 |
 | `GameFrameXAdvertisementAliPayMiniGameCroppingHelper` | IL2CPP link.xml 替代方案 — 保留類型引用 |
+| `AliPayMiniGameAdvertisementConfig` | 強型別渠道配置 — 含 `adUnitId` 欄位 |
+| `AliPayMiniGameAdvertisementBootstrap` | 渠道啟動註冊 — `BeforeSceneLoad` 自註冊進 `AdvertisementRegistry`，含啟動期 `Config` 靜態屬性 |
 
 ## 快速開始
 
@@ -77,6 +79,22 @@
    ```
 3. 在 Unity 的 `Package Manager` 中使用 `Git URL` 的方式添加庫，地址為：`https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame.git`
 4. 直接下載倉庫放置到 Unity 專案的 `Packages` 目錄下，會自動載入識別。
+
+### 渠道註冊與配置
+
+啟動期（首次廣告呼叫前）對 `AliPayMiniGameAdvertisementBootstrap.Config` 賦值，注入強型別渠道配置：
+
+```csharp
+using GameFrameX.Advertisement.AliPayMiniGame.Runtime;
+
+AliPayMiniGameAdvertisementBootstrap.Config = new AliPayMiniGameAdvertisementConfig
+{
+    adUnitId = "你的廣告位ID",
+    isDebug = false,
+};
+```
+
+渠道常數 `AliPayMiniGameAdvertisementManager.ChannelId` 的值為 `"alipayminigame"`；顯式路由 `AdvertisementRegistry.ResolveManager("alipayminigame")` 可用。
 ## 平台支援
 
 | 平台 | 支援 |
@@ -105,6 +123,11 @@
 - 初始發佈
 - 支援支付寶小遊戲平台激勵影片廣告
 - IL2CPP 裁剪保護
+
+### 破壞性變更與遷移
+
+- `AdvertisementComponent` 上的 WebGL 支付寶廣告位ID 巨選序列化欄位已移除，`adUnitId` 改經 `AliPayMiniGameAdvertisementBootstrap.Config` 注入；
+- 主套件 Inspector 類型下拉已移除，渠道發現統一收斂到 `AdvertisementRegistry`。
 
 
 ## 依賴

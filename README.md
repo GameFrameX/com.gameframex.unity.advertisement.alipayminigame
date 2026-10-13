@@ -35,13 +35,15 @@ Alipay Mini Game platform adapter for the [Game Frame X Advertisement](https://g
 
 ## Architecture
 
-This package is an **adapter implementation** of `BaseAdvertisementManager` from the Game Frame X Advertisement core. It is discovered and loaded automatically by `AdvertisementComponent` via Unity Inspector configuration.
+This package is an **adapter implementation** of `BaseAdvertisementManager` from the Game Frame X Advertisement core. It registers itself into the core `AdvertisementRegistry` via `AliPayMiniGameAdvertisementBootstrap` at the `BeforeSceneLoad` stage; when the macros `UNITY_WEBGL && ENABLE_ALIPAY_MINI_GAME && ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT` are not enabled the code is stripped and registration does not happen (referencing the package is the registration). Initialization is injected as a strongly-typed config by the factory closure.
 
 | Class | Description |
 |-------|-------------|
 | `AliPayMiniGameAdvertisementManager` | Rewarded video ad manager — load, show, and lifecycle |
 | `AliPayVideoAdCallback` | Callback handler for ad load/show events |
 | `GameFrameXAdvertisementAliPayMiniGameCroppingHelper` | IL2CPP link.xml alternative — preserves type references |
+| `AliPayMiniGameAdvertisementConfig` | Strongly-typed channel config — with the `adUnitId` field |
+| `AliPayMiniGameAdvertisementBootstrap` | Channel bootstrap registration — self-registers into `AdvertisementRegistry` at `BeforeSceneLoad`, with a startup-time `Config` static property |
 
 ## Quick Start
 
@@ -77,6 +79,22 @@ Choose one of the following methods:
    ```
 3. Use **Package Manager** in Unity with **Git URL**: `https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame.git`
 4. Clone the repository into your Unity project's `Packages` directory. It will be loaded automatically.
+
+### Channel Registration & Configuration
+
+At startup (before the first ad call), assign `AliPayMiniGameAdvertisementBootstrap.Config` to inject the strongly-typed channel config:
+
+```csharp
+using GameFrameX.Advertisement.AliPayMiniGame.Runtime;
+
+AliPayMiniGameAdvertisementBootstrap.Config = new AliPayMiniGameAdvertisementConfig
+{
+    adUnitId = "your ad unit id",
+    isDebug = false,
+};
+```
+
+The channel constant `AliPayMiniGameAdvertisementManager.ChannelId` is `"alipayminigame"`; explicit routing via `AdvertisementRegistry.ResolveManager("alipayminigame")` is available.
 ## Platform Support
 
 | Platform | Supported |
@@ -105,6 +123,11 @@ Choose one of the following methods:
 - Initial release
 - Rewarded video ad support for Alipay Mini Game platform
 - IL2CPP cropping protection
+
+### Breaking Changes & Migration
+
+- The WebGL Alipay macro-selected ad unit ID serialized field on `AdvertisementComponent` has been removed; `adUnitId` is now injected via `AliPayMiniGameAdvertisementBootstrap.Config`;
+- The core package's Inspector type dropdown has been removed; channel discovery is consolidated into `AdvertisementRegistry`.
 
 
 ## Dependencies
