@@ -1,7 +1,6 @@
 #if UNITY_WEBGL && ENABLE_ALIPAY_MINI_GAME && ENABLE_ALIPAY_MINI_GAME_ADVERTISEMENT
 
 using System;
-using UnityEngine.Scripting;
 
 namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
 {
@@ -11,7 +10,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
     /// <remarks>
     /// Alipay mini-game video ad callback handler, managing callbacks for ad loading, display, and close events.
     /// </remarks>
-    [Preserve]
+    [UnityEngine.Scripting.Preserve]
     internal class AliPayVideoAdCallback
     {
         private Action<string> loadSuccess;
@@ -26,7 +25,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
         /// Gets or sets the ad show result callback, parameter indicates whether the user watched the ad completely.
         /// </remarks>
         /// <value>展示结果回调 / Show result callback</value>
-        [Preserve]
+        [UnityEngine.Scripting.Preserve]
         public Action<bool> ShowResult { get; set; }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
         /// </remarks>
         /// <param name="success">加载成功回调 / Load success callback</param>
         /// <param name="fail">加载失败回调 / Load failure callback</param>
-        [Preserve]
+        [UnityEngine.Scripting.Preserve]
         public void SetLoadCallback(Action<string> success, Action<string> fail)
         {
             loadSuccess = success;
@@ -52,7 +51,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
         /// </remarks>
         /// <param name="success">展示成功回调 / Show success callback</param>
         /// <param name="fail">展示失败回调 / Show failure callback</param>
-        [Preserve]
+        [UnityEngine.Scripting.Preserve]
         public void SetShowCallback(Action<string> success, Action<string> fail)
         {
             showSuccess = success;
@@ -65,7 +64,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
         /// <remarks>
         /// Notifies that the ad has loaded successfully.
         /// </remarks>
-        [Preserve]
+        [UnityEngine.Scripting.Preserve]
         public void OnLoadSuccess()
         {
             loadSuccess?.Invoke(null);
@@ -78,7 +77,7 @@ namespace GameFrameX.Advertisement.AliPayMiniGame.Runtime
         /// Notifies that the ad has failed to load.
         /// </remarks>
         /// <param name="error">错误信息 / Error message</param>
-        [Preserve]
+        [UnityEngine.Scripting.Preserve]
         public void OnLoadError(string error)
         {
             loadFail?.Invoke(error);
