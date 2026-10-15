@@ -1,3 +1,18 @@
+# [2.0.0](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.3...2.0.0) (2026-10-15)
+
+
+### Features
+
+* **advertisement.alipayminigame:** 适配 GameFrameX 3.0.0 ([d4a14b6](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/commit/d4a14b669c5761c030c024d5b2d895995087a91f))
+* **ad:** 引入 Bootstrap + 强类型 Config ([fd3a3df](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/commit/fd3a3df300626556b605c09bbd4dbca2b579ab79))
+
+
+### BREAKING CHANGES
+
+* **ad:** 移除 AdvertisementComponent 上的 WebGL 支付宝广告位 ID
+宏选序列化字段，adUnitId 改为启动期由 AliPayMiniGameAdvertisementBootstrap.Config
+注入；主包 Inspector 类型下拉同步移除，渠道发现统一收敛到 AdvertisementRegistry。
+
 ## [1.0.3](https://github.com/gameframex/com.gameframex.unity.advertisement.alipayminigame/compare/1.0.2...1.0.3) (2026-07-29)
 
 
